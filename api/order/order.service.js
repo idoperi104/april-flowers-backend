@@ -5,7 +5,7 @@ const ObjectId = require("mongodb").ObjectId
 
 async function query(filterBy = { txt: "" }) {
   try {
-    const criteria = {}
+    const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection("order")
     var orders = await collection.find(criteria).toArray()
     return orders
@@ -62,6 +62,41 @@ async function update(order) {
     logger.error(`cannot update order ${order._id}`, err)
     throw err
   }
+}
+
+function _buildCriteria(filterBy) {
+  console.log("filterBy: ", filterBy);
+  const criteria = {}
+  if (filterBy.name) {
+    const nameCriteria = { $regex: filterBy.name, $options: "i" }
+    criteria.name = nameCriteria
+  }
+  if (filterBy.shipped) {
+    switch (filterBy.shipped) {
+      case "shipped":
+        criteria.isShipped = true
+        break
+      case "notShipped":
+        criteria.isShipped = false
+        break
+      default:
+        break
+    }
+  }
+  if (filterBy.paid) {
+    switch (filterBy.paid) {
+      case "paid":
+        criteria.isPaid = true
+        break
+      case "notPaid":
+        criteria.isPaid = false
+        break
+      default:
+        break
+    }
+  }
+
+  return criteria
 }
 
 module.exports = {

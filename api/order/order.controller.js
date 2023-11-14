@@ -6,7 +6,9 @@ async function getOrders(req, res) {
   try {
     logger.debug('Getting Orders')
     const filterBy = {
-      txt: req.query.txt || ''
+      name: req.query.name || '',
+      shipped: req.query.shipped || '',
+      paid: req.query.paid || '',
     }
     const orders = await orderService.query(filterBy)
     res.json(orders)

@@ -6,7 +6,7 @@ async function getCategories(req, res) {
   try {
     logger.debug('Getting Category')
     const filterBy = {
-      txt: req.query.txt || ''
+      name: req.query.name || '',
     }
     const categories = await categoryService.query(filterBy)
     res.json(categories)

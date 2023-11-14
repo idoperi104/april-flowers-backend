@@ -102,8 +102,6 @@ function _buildCriteria(filterBy) {
 }
 
 function _buildSortCriteria(filterBy) {
-  console.log("filterBy: ", filterBy);
-  filterBy.sortBy = "salesAmount"
   const criteria = {}
 
   if (filterBy.sortBy) {
