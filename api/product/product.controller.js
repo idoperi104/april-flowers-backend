@@ -6,7 +6,11 @@ async function getProducts(req, res) {
   try {
     logger.debug('Getting Products')
     const filterBy = {
-      txt: req.query.txt || ''
+      name: req.query.name || '',
+      category: req.query.category || '',
+      stock: req.query.stock || '',
+      sortBy: req.query.sortBy || '',
+      amount: Number(req.query.amount) || 0,
     }
     const products = await productService.query(filterBy)
     res.json(products)

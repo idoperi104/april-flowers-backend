@@ -3,11 +3,16 @@ const logger = require("../../services/logger.service")
 const utilService = require("../../services/util.service")
 const ObjectId = require("mongodb").ObjectId
 
-async function query(filterBy = { txt: "" }) {
+async function query(filterBy) {
   try {
-    const criteria = {}
+    const criteria = _buildCriteria(filterBy)
+    const sortCriteria = _buildSortCriteria(filterBy)
     const collection = await dbService.getCollection("product")
-    var products = await collection.find(criteria).toArray()
+    var products = await collection
+      .find(criteria)
+      .sort(sortCriteria)
+      .limit(filterBy.amount)
+      .toArray()
     return products
   } catch (err) {
     logger.error("cannot find products", err)
@@ -69,6 +74,51 @@ async function update(product) {
     logger.error(`cannot update product ${product._id}`, err)
     throw err
   }
+}
+
+function _buildCriteria(filterBy) {
+  const criteria = {}
+  if (filterBy.name) {
+    const nameCriteria = { $regex: filterBy.name, $options: "i" }
+    criteria.name = nameCriteria
+  }
+  if (filterBy.category) {
+    criteria.category = filterBy.category
+  }
+  if (filterBy.stock) {
+    switch (filterBy.stock) {
+      case "inStock":
+        criteria.isInStock = true
+        break
+      case "outOfStock":
+        criteria.isInStock = false
+        break
+      default:
+        break
+    }
+  }
+
+  return criteria
+}
+
+function _buildSortCriteria(filterBy) {
+  console.log("filterBy: ", filterBy);
+  filterBy.sortBy = "salesAmount"
+  const criteria = {}
+
+  if (filterBy.sortBy) {
+    switch (filterBy.sortBy) {
+      case "salesAmount":
+        criteria.salesAmount = -1
+        break
+      default:
+        break
+    }
+  } else {
+    criteria.name = 1
+  }
+
+  return criteria
 }
 
 module.exports = {
