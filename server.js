@@ -23,8 +23,6 @@ if (process.env.NODE_ENV === 'production') {
 
 const authRoutes = require('./api/auth/auth.routes')
 const userRoutes = require('./api/user/user.routes')
-const reviewRoutes = require('./api/review/review.routes')
-const carRoutes = require('./api/car/car.routes')
 const productRoutes = require('./api/product/product.routes')
 const categoryRoutes = require('./api/category/category.routes')
 const orderRoutes = require('./api/order/order.routes')
@@ -36,8 +34,6 @@ app.all('*', setupAsyncLocalStorage)
 
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
-app.use('/api/review', reviewRoutes)
-app.use('/api/car', carRoutes)
 app.use('/api/product', productRoutes)
 app.use('/api/category', categoryRoutes)
 app.use('/api/order', orderRoutes)

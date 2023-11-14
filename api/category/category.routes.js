@@ -9,12 +9,8 @@ const router = express.Router()
 
 router.get('/', log, getCategories)
 router.get('/:id', getCategoryById)
-// router.post('/', requireAuth, addCategory)
-router.post('/', requireAuth, addCategory)
-// router.put('/:id', requireAuth, updateCategory)
+router.post('/', requireAdmin, addCategory)
 router.put('/:id', requireAdmin, updateCategory)
-// router.delete('/:id', requireAuth, removeCategory)
 router.delete('/:id', requireAdmin, removeCategory)
-// router.delete('/:id', requireAuth, requireAdmin, removeCategory)
 
 module.exports = router
